@@ -1,32 +1,35 @@
-## Blog Post Title From First Header
+# The coolest thing you've learned about programming in R  
 
-Due to a plugin called `jekyll-titles-from-headings` which is supported by GitHub Pages by default. The above header (in the markdown file) will be automatically used as the pages title.
+The programming in R is so powerful and useful, I am impressed with how well R program read data, manipulate data, summarize data, make fancy plots, and so on. All of them are pretty interesting, I'd like to give an example of making plots, which saves lots of time compared with y without R programming before. I've just started using R and understand that mastering it will help a lot in the future.
 
-If the file does not start with a header, then the post title will be derived from the filename.
 
-This is a sample blog post. You can talk about all sorts of fun things here.
+# An example 
 
----
 
-### This is a header
+```{r plotbyholiday}
 
-#### Some T-SQL Code
+library(readr)
 
-```tsql
-SELECT This, [Is], A, Code, Block -- Using SSMS style syntax highlighting
-    , REVERSE('abc')
-FROM dbo.SomeTable s
-    CROSS JOIN dbo.OtherTable o;
-```
+library(ggplot2)
 
-#### Some PowerShell Code
 
-```powershell
-Write-Host "This is a powershell Code block";
+# read in the data
+bikedata <- readr::read_csv("E:/Statistics/ST558/homework8/work8/SeoulBikeData.csv",locale=locale(encoding="latin1"))
 
-# There are many other languages you can use, but the style has to be loaded first
+# Drop the Date
+bikedata2 <- subset(bikedata, select = -c(Date))
 
-ForEach ($thing in $things) {
-    Write-Output "It highlights it using the GitHub style"
-}
+
+# Create a new variable that is 1 if the number of bikes rented is greater than or equal to 700 and 0 otherwise  
+
+bikedata2$logicRent <- ifelse(bikedata2$`Rented Bike Count` >= 700, 1, 0)
+
+
+# plot for frequencies of seasons, colored by the binary rental variable
+g <- ggplot(data = bikedata2, aes(x = Holiday))
+ g+ geom_bar(aes(fill = as.factor(logicRent)), position = "dodge") +
+scale_fill_discrete(name = "Binary Bike Rental",
+labels = c("less than 700", "greater than 700")) +
+labs(title = "Bar plot of Holiday by Bike Rental Counts") + coord_flip()
+
 ```
