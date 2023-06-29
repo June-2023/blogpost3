@@ -1,0 +1,53 @@
+---
+title: "Programming Background"
+output: github_document
+date: "2023-06-29"
+---
+
+```{r setup}
+knitr::opts_chunk$set(fig.path = "E:/Statistics/ST558/homework8/blog/blog3/../images/")
+```
+
+
+
+
+# The coolest thing you've learned about programming in R  
+
+The programming in R is so powerful and useful, I am impressed with how well R program read data, manipulate data, summarize data, make fancy plots, and so on. All of them are pretty interesting, I'd like to give an example of making plots, which saves lots of time compared with y without R programming before. I've just started using R and understand that mastering it will help a lot in the future.
+
+
+# An example 
+
+
+```{r plotbyholiday}
+
+library(readr)
+
+library(ggplot2)
+
+
+# read in the data
+bikedata <- readr::read_csv("E:/Statistics/ST558/homework8/work8/SeoulBikeData.csv",locale=locale(encoding="latin1"))
+
+# Drop the Date
+bikedata2 <- subset(bikedata, select = -c(Date))
+
+
+# Create a new variable that is 1 if the number of bikes rented is greater than or equal to 700 and 0 otherwise  
+
+bikedata2$logicRent <- ifelse(bikedata2$`Rented Bike Count` >= 700, 1, 0)
+
+
+# plot for frequencies of seasons, colored by the binary rental variable
+g <- ggplot(data = bikedata2, aes(x = Holiday))
+ g+ geom_bar(aes(fill = as.factor(logicRent)), position = "dodge") +
+scale_fill_discrete(name = "Binary Bike Rental",
+labels = c("less than 700", "greater than 700")) +
+labs(title = "Bar plot of Holiday by Bike Rental Counts") + coord_flip()
+
+```
+
+
+
+
+
